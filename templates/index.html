@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Scanner une espèce</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin: 40px; }
+    #reader { width: 300px; margin: auto; }
+  </style>
+</head>
+<body>
+  <h2>Scanner une espèce botanique</h2>
+  <div id="reader"></div>
+  <p id="result"></p>
+
+  <script>
+    function onScanSuccess(decodedText, decodedResult) {
+      document.getElementById("result").innerText = "Code détecté : " + decodedText;
+      window.location.href = "/fiche/" + encodeURIComponent(decodedText);
+    }
+
+    function onScanFailure(error) {
+      // console.log(error);
+    }
+
+    const html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader", { fps: 10, qrbox: 250 }, false);
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+  </script>
+</body>
+</html>

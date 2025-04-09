@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Fiche botanique</title>
+  <style>
+    body { font-family: sans-serif; padding: 30px; line-height: 1.6; }
+    img { margin: 10px 0; max-width: 400px; }
+    h2 { margin-bottom: 20px; }
+    .field { margin-bottom: 10px; }
+    .field strong { display: inline-block; width: 240px; color: #444; }
+  </style>
+</head>
+<body>
+
+  {% if plant %}
+    <h2>{{ plant["Nom scientifique"] }} ({{ plant["Nom français"] }})</h2>
+
+    {% for key, value in plant.items() %}
+    {% if key == "intérêts" and value %}
+    <div class="field">
+      <strong>{{ key }} :</strong>
+      <ul>
+        {% for item in value %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% elif value and "image" not in key|lower and "map" not in key|lower and key not in ["Nom scientifique", "Nom français", "intérêts"] %}
+    <div class="field">
+      <strong>{{ key }} :</strong> {{ value }}
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    {% if plant.image %}
+    <div class="field">
+      <strong>Images :</strong><br>
+    {% for img in plant.image %}
+      <img src="{{ url_for('static', filename=img) }}" alt="Photo de l'espèce">
+    {% endfor %}
+   </div>
+    {% endif %}
+
+    {% if plant.map %}
+    <div class="field">
+      <strong>Maps :</strong><br>
+      <img src="{{ url_for('static', filename=plant.map) }}" alt="Carte de répartition">
+    </div>
+    {% endif %}
+
+  {% else %}
+    <p>Espèce non trouvée : {{ code }}</p>
+  {% endif %}
+
+</body>
+</html>
