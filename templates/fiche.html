@@ -55,10 +55,9 @@
 {% if plant %}
   <h2>{{ plant["Nom scientifique"] }} ({{ plant["Nom français"] }})</h2>
 
-  <!-- Image count logic -->
   {% set nb_images = plant.image | length %}
 
-  <!-- 📅 Bloc 1 : Code + noms + classification + image 1 -->
+  <!-- Bloc 1 : Code + noms + classification / Image 1 -->
   <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
     <div style="flex: 2; min-width: 400px;">
       {% for key in ["Code", "Nom arabe", "Noms vernaculaires", "Origine géographique"] %}
@@ -67,7 +66,7 @@
         {% endif %}
       {% endfor %}
 
-      <div class="section-title">🔬 Classification</div>
+      <div class="section-title">🧬 Classification</div>
       {% for key in ["Division", "Classe", "Ordre", "Famille", "Genre", "Type de plante"] %}
         {% if plant[key] is not none and plant[key]|string != 'nan' %}
         <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
@@ -78,17 +77,17 @@
     <div style="flex: 1.2; min-width: 280px;">
       {% if nb_images >= 1 %}
       <img src="{{ url_for('static', filename=plant.image[0]) }}" alt="Image 1" style="width: 100%; border-radius: 6px;">
-      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès.</div>
+      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès le 19/03/2025.</div>
       {% endif %}
     </div>
   </div>
 
-  {% if nb_images >= 2 %}
-  <!-- 🖼️ Bloc 2 : image 2 / phénologie + botanique -->
-  <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px;">
+  {% if nb_images == 2 %}
+  <!-- Bloc 2 : Image 2 / Phénologie + Description botanique -->
+  <div style="display: flex; gap: 30px; flex-wrap: wrap; margin-top: 30px;">
     <div style="flex: 1.2; min-width: 280px;">
       <img src="{{ url_for('static', filename=plant.image[1]) }}" alt="Image 2" style="width: 100%; border-radius: 6px;">
-      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès.</div>
+      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès le 19/03/2025.</div>
     </div>
     <div style="flex: 2; min-width: 400px;">
       <div class="section-title">🌦️ Informations phénologiques</div>
@@ -98,20 +97,18 @@
         {% endif %}
       {% endfor %}
 
-      {% if nb_images == 2 %}
       <div class="section-title">🔬 Description botanique</div>
       {% for key in ["Type de feuillage", "Hauteur moyenne ou maximale", "Type de feuilles", "Forme des feuilles", "Bord des feuilles", "Disposition des feuilles", "Couleur des fleurs", "Structure florale", "Type de fruit", "Type de racine"] %}
         {% if plant[key] is not none and plant[key]|string != 'nan' %}
         <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
         {% endif %}
       {% endfor %}
-      {% endif %}
     </div>
   </div>
   {% endif %}
 
   {% if nb_images == 3 %}
-  <!-- 🔬 Description botanique / image 3 -->
+  <!-- Bloc 3 : Description botanique / image 3 -->
   <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px;">
     <div style="flex: 2; min-width: 400px;">
       <div class="section-title">🔬 Description botanique</div>
@@ -123,12 +120,12 @@
     </div>
     <div style="flex: 1.2; min-width: 280px;">
       <img src="{{ url_for('static', filename=plant.image[2]) }}" alt="Image 3" style="width: 100%; border-radius: 6px;">
-      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès.</div>
+      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès le 19/03/2025.</div>
     </div>
   </div>
   {% endif %}
 
-  <!-- 🌿 Intérêts / Carte de répartition -->
+  <!-- Bloc 4 : Intérêts / carte -->
   <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px;">
     <div style="flex: 2; min-width: 400px;">
       {% if plant["intérêts"] %}
