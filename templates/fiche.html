@@ -1,3 +1,56 @@
+<style>
+  body {
+    font-family: sans-serif;
+    padding: 30px;
+    line-height: 1.6;
+  }
+
+  img {
+    margin: 10px 0;
+    max-width: 400px;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    margin-top: 40px;
+    margin-bottom: 15px;
+    color: #2ecc71; /* 💚 Vert clair */
+    font-weight: bold;
+    font-size: 1.3em;
+    text-decoration: underline;
+  }
+
+  .field {
+    margin-bottom: 10px;
+  }
+
+  .field strong {
+    display: inline-block;
+    width: 240px;
+    color: #444;
+    font-weight: normal; /* ✅ pas en gras */
+  }
+
+  ul {
+    margin-top: 5px;
+    margin-left: 20px;
+  }
+
+  figure {
+    margin: 0 0 20px 0;
+  }
+
+  figcaption {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+  }
+</style>
+
+
 {% if plant %}
   <h2>{{ plant["Nom scientifique"] }} ({{ plant["Nom français"] }})</h2>
 
