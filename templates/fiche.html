@@ -34,7 +34,7 @@
     {% endif %}
     {% endfor %}
 
-    <div class="section-title">🔬 Classification </div>
+    <div class="section-title">🧬 Classification </div>
     {% for key, value in plant.items() %}
       {% if key in ["Division", "Classe", "Ordre", "Famille", "Genre", "Type de plante"] and value %}
       <div class="field">
@@ -76,20 +76,16 @@
     {% endif %}
     {% endfor %}
 
+    <div class="section-title">🖼️ Images </div>
     {% if plant.image %}
-    <div class="field">
-      <strong>Images :</strong><br>
     {% for img in plant.image %}
       <img src="{{ url_for('static', filename=img) }}" alt="Photo de l'espèce">
     {% endfor %}
-   </div>
     {% endif %}
 
+    <div class="section-title">🗺️ Carte de répartition </div>
     {% if plant.map %}
-    <div class="field">
-      <strong>Maps :</strong><br>
       <img src="{{ url_for('static', filename=plant.map) }}" alt="Carte de répartition">
-    </div>
     {% endif %}
 
   {% else %}
