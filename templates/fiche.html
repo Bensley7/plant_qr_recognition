@@ -27,7 +27,7 @@
     {% endfor %}
 
     {% for key, value in plant.items() %}
-    {% if key in ["Nom arabe",	"Noms vernaculaires,	"Origine géographique"] and value %}
+    {% if key in ["Nom arabe", "Noms vernaculaires", "Origine géographique"] and value %}
     <div class="field">
       <strong>{{ key }} :</strong> {{ value }}
     </div>
@@ -36,7 +36,7 @@
 
     <div class="section-title">🔬 Classification </div>
     {% for key, value in plant.items() %}
-      {% if key in ["Division", "Classe", "Ordre", "Famille" "Genre" "Type de plante"] and value %}
+      {% if key in ["Division", "Classe", "Ordre", "Famille", "Genre", "Type de plante"] and value %}
       <div class="field">
         <strong>{{ key }} :</strong> {{ value }}
       </div>
