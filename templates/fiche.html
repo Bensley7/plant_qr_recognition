@@ -7,14 +7,61 @@
     body { font-family: sans-serif; padding: 30px; line-height: 1.6; }
     img { margin: 10px 0; max-width: 400px; }
     h2 { margin-bottom: 20px; }
+    .section-title { margin-top: 30px; color: #1a4d2e; font-size: 1.3em; border-bottom: 1px solid #ccc; }
     .field { margin-bottom: 10px; }
     .field strong { display: inline-block; width: 240px; color: #444; }
+    ul { margin-top: 5px; }
   </style>
 </head>
 <body>
 
   {% if plant %}
     <h2>{{ plant["Nom scientifique"] }} ({{ plant["Nom français"] }})</h2>
+
+    {% for key, value in plant.items() %}
+    {% if key == "Code" and value %}
+    <div class="field">
+      <strong>{{ key }} :</strong> {{ value }}
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    {% for key, value in plant.items() %}
+    {% if key in ["Nom arabe",	"Noms vernaculaires,	"Origine géographique"] and value %}
+    <div class="field">
+      <strong>{{ key }} :</strong> {{ value }}
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <div class="section-title">🔬 Classification </div>
+    {% for key, value in plant.items() %}
+      {% if key in ["Division", "Classe", "Ordre", "Famille" "Genre" "Type de plante"] and value %}
+      <div class="field">
+        <strong>{{ key }} :</strong> {{ value }}
+      </div>
+      {% endif %}
+    {% endfor %}
+
+    <div class="section-title">🔬 Description botanique </div>
+    {% for key, value in plant.items() %}
+      {% if key in ["Type de feuillage",	"Hauteur moyenne ou maximale", "Type de feuilles",	"Forme des feuilles", "Bord des feuilles",	"Disposition des feuilles",	"Couleur des fleurs",	"Structure florale",	"Type de fruit",	"Type de racine"]
+        and value %}
+      <div class="field">
+        <strong>{{ key }} :</strong> {{ value }}
+      </div>
+      {% endif %}
+    {% endfor %}
+  
+    <div class="section-title">🌦️ Informations phénologiques </div>
+    {% for key, value in plant.items() %}
+      {% if key in ["Mois de débourrement",	"Période de croissance végétative",	"Période de floraison",	"Période de fructification",	"Période de maturité des fruits",	"Période de chute des feuilles"]
+        and value %}
+      <div class="field">
+        <strong>{{ key }} :</strong> {{ value }}
+      </div>
+      {% endif %}
+    {% endfor %}
 
     {% for key, value in plant.items() %}
     {% if key == "intérêts" and value %}
@@ -25,10 +72,6 @@
           <li>{{ item }}</li>
         {% endfor %}
       </ul>
-    </div>
-    {% elif value and "image" not in key|lower and "map" not in key|lower and key not in ["Nom scientifique", "Nom français", "intérêts"] %}
-    <div class="field">
-      <strong>{{ key }} :</strong> {{ value }}
     </div>
     {% endif %}
     {% endfor %}
