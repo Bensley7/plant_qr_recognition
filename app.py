@@ -7,7 +7,7 @@ from pathlib import Path
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
-plant_db = pd.read_csv("data/fiche_technique_v4.csv")
+plant_db = pd.read_csv("data/fiche_technique_v6.csv")
 
 @app.route("/", methods=["GET"])
 def index():
