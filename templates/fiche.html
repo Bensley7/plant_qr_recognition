@@ -74,25 +74,33 @@
     {% endif %}
     {% endfor %}
 
-    <div class="section-title">🖼️ Images </div>
-    {% if plant.image %}
-    {% for img in plant.image %}
-      <img src="{{ url_for('static', filename=img) }}" alt="Photo de l'espèce">
-    {% endfor %}
-    <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
-      Photos prises de l'ENS de Fès.
-    </div>
-    {% endif %}
+    <div class="section-title">🖼️ Images & 🗺️ Carte de répartition</div>
 
-    <div class="section-title">🗺️ Carte de répartition </div>
-    {% if plant.map %}
-      <img src="{{ url_for('static', filename=plant.map) }}" alt="Carte de répartition">
-      {% if plant["Url carte de répartition"] %}
-      <small>
-        Source : <a href="{{ plant['Url carte de répartition'] }}" target="_blank">{{ plant['Url carte de répartition'] }}</a>
-      </small>
-    {% endif %}
-    {% endif %}
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
+    
+      {% if plant.image %}
+      <div style="flex: 1; min-width: 300px;">
+        {% for img in plant.image %}
+          <img src="{{ url_for('static', filename=img) }}" alt="Photo de l'espèce" style="width: 100%; max-width: 400px;">
+        {% endfor %}
+        <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+          Photos prises de l'ENS de Fès le 19/03/2025.
+        </div>
+      </div>
+      {% endif %}
+    
+      {% if plant.map %}
+      <div style="flex: 1; min-width: 300px;">
+        <img src="{{ url_for('static', filename=plant.map) }}" alt="Carte de répartition" style="width: 100%; max-width: 400px;">
+        {% if plant["Url carte de répartition"] %}
+        <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+          Source : <a href="{{ plant['Url carte de répartition'] }}" target="_blank">{{ plant['Url carte de répartition'] }}</a>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    
+    </div>
 
   {% else %}
     <p>Espèce non trouvée : {{ code }}</p>
