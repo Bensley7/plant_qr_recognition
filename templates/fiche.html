@@ -63,16 +63,14 @@
       {% endif %}
     {% endfor %}
 
+    <div class="section-title">🌿 Intérêts </div>
     {% for key, value in plant.items() %}
     {% if key == "intérêts" and value %}
-    <div class="field">
-      <strong>{{ key }} :</strong>
       <ul>
         {% for item in value %}
           <li>{{ item }}</li>
         {% endfor %}
       </ul>
-    </div>
     {% endif %}
     {% endfor %}
 
@@ -81,11 +79,19 @@
     {% for img in plant.image %}
       <img src="{{ url_for('static', filename=img) }}" alt="Photo de l'espèce">
     {% endfor %}
+    <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+      Photos prises de l'ENS de Fès.
+    </div>
     {% endif %}
 
     <div class="section-title">🗺️ Carte de répartition </div>
     {% if plant.map %}
       <img src="{{ url_for('static', filename=plant.map) }}" alt="Carte de répartition">
+      {% if plant["Url carte de répartition"] %}
+      <small>
+        Source : <a href="{{ plant['Url carte de répartition'] }}" target="_blank">{{ plant['Url carte de répartition'] }}</a>
+      </small>
+    {% endif %}
     {% endif %}
 
   {% else %}
