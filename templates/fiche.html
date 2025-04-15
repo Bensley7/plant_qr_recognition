@@ -51,76 +51,84 @@
 </style>
 
 
+<!-- HTML Template adapted to number of images -->
 {% if plant %}
   <h2>{{ plant["Nom scientifique"] }} ({{ plant["Nom français"] }})</h2>
 
-  <!-- 🧾 SECTION 1 — Code + noms + classification / Image 1 -->
+  <!-- Image count logic -->
+  {% set nb_images = plant.image | length %}
+
+  <!-- 📅 Bloc 1 : Code + noms + classification + image 1 -->
   <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
     <div style="flex: 2; min-width: 400px;">
-      {% if plant["Code"] %}
-      <div class="field"><strong>Code :</strong> {{ plant["Code"] }}</div>
-      {% endif %}
-      {% for key in ["Nom arabe", "Noms vernaculaires", "Origine géographique"] %}
-        {% if plant[key] %}
+      {% for key in ["Code", "Nom arabe", "Noms vernaculaires", "Origine géographique"] %}
+        {% if plant[key] is not none and plant[key]|string != 'nan' %}
         <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
         {% endif %}
       {% endfor %}
 
-      <div class="section-title">🧬 Classification</div>
+      <div class="section-title">🔬 Classification</div>
       {% for key in ["Division", "Classe", "Ordre", "Famille", "Genre", "Type de plante"] %}
-        {% if plant[key] %}
+        {% if plant[key] is not none and plant[key]|string != 'nan' %}
         <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
         {% endif %}
       {% endfor %}
     </div>
 
     <div style="flex: 1.2; min-width: 280px;">
-      {% if plant.image and plant.image[0] %}
+      {% if nb_images >= 1 %}
       <img src="{{ url_for('static', filename=plant.image[0]) }}" alt="Image 1" style="width: 100%; border-radius: 6px;">
-      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès le 19/03/2025.</div>
+      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès.</div>
       {% endif %}
     </div>
   </div>
 
-  <!-- 🖼️ SECTION 2 — Image 2 / Phénologie -->
+  {% if nb_images >= 2 %}
+  <!-- 🖼️ Bloc 2 : image 2 / phénologie + botanique -->
   <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px;">
     <div style="flex: 1.2; min-width: 280px;">
-      {% if plant.image and plant.image[1] %}
       <img src="{{ url_for('static', filename=plant.image[1]) }}" alt="Image 2" style="width: 100%; border-radius: 6px;">
-      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès le 19/03/2025.</div>
-      {% endif %}
+      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès.</div>
     </div>
-
     <div style="flex: 2; min-width: 400px;">
       <div class="section-title">🌦️ Informations phénologiques</div>
       {% for key in ["Mois de débourrement", "Période de croissance végétative", "Période de floraison", "Période de fructification", "Période de maturité des fruits", "Période de chute des feuilles"] %}
-        {% if plant[key] %}
+        {% if plant[key] is not none and plant[key]|string != 'nan' %}
         <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
         {% endif %}
       {% endfor %}
+
+      {% if nb_images == 2 %}
+      <div class="section-title">🔬 Description botanique</div>
+      {% for key in ["Type de feuillage", "Hauteur moyenne ou maximale", "Type de feuilles", "Forme des feuilles", "Bord des feuilles", "Disposition des feuilles", "Couleur des fleurs", "Structure florale", "Type de fruit", "Type de racine"] %}
+        {% if plant[key] is not none and plant[key]|string != 'nan' %}
+        <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
+        {% endif %}
+      {% endfor %}
+      {% endif %}
     </div>
   </div>
+  {% endif %}
 
-  <!-- 🔬 SECTION 3 — Botanique / Image 3 -->
+  {% if nb_images == 3 %}
+  <!-- 🔬 Description botanique / image 3 -->
   <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px;">
     <div style="flex: 2; min-width: 400px;">
       <div class="section-title">🔬 Description botanique</div>
       {% for key in ["Type de feuillage", "Hauteur moyenne ou maximale", "Type de feuilles", "Forme des feuilles", "Bord des feuilles", "Disposition des feuilles", "Couleur des fleurs", "Structure florale", "Type de fruit", "Type de racine"] %}
-        {% if plant[key] %}
+        {% if plant[key] is not none and plant[key]|string != 'nan' %}
         <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
         {% endif %}
       {% endfor %}
     </div>
-
     <div style="flex: 1.2; min-width: 280px;">
-      {% if plant.image and plant.image[2] %}
       <img src="{{ url_for('static', filename=plant.image[2]) }}" alt="Image 3" style="width: 100%; border-radius: 6px;">
-      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès le 19/03/2025.</div>
-      {% endif %}
+      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès.</div>
     </div>
   </div>
+  {% endif %}
 
-  <!-- 🌿 SECTION 4 — Intérêts / Carte -->
+  <!-- 🌿 Intérêts / Carte de répartition -->
   <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px;">
     <div style="flex: 2; min-width: 400px;">
       {% if plant["intérêts"] %}
@@ -132,20 +140,18 @@
       </ul>
       {% endif %}
     </div>
-
     <div style="flex: 1.2; min-width: 280px;">
       {% if plant.map %}
       <div class="section-title">🗺️ Carte de répartition</div>
       <img src="{{ url_for('static', filename=plant.map) }}" alt="Carte de répartition" style="width: 100%; border-radius: 6px;">
       {% if plant["Url carte de répartition"] %}
       <div style="font-size: 0.85em; color: #666; margin-top: 5px;">
-        Source : <a href="{{ plant["Url carte de répartition"] }}" target="_blank">{{ plant["Url carte de répartition"] }}</a>
+        Source : <a href="{{ plant['Url carte de répartition'] }}" target="_blank">{{ plant['Url carte de répartition'] }}</a>
       </div>
       {% endif %}
       {% endif %}
     </div>
   </div>
-
 {% else %}
   <p>Espèce non trouvée : {{ code }}</p>
 {% endif %}
