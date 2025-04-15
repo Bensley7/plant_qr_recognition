@@ -1,79 +1,98 @@
-<div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+{% if plant %}
+  <h2>{{ plant["Nom scientifique"] }} ({{ plant["Nom français"] }})</h2>
 
-  <!-- 🧾 COLONNE GAUCHE — Données textuelles -->
-  <div style="flex: 2; min-width: 400px;">
-
-    <h2>{{ plant["Nom scientifique"] }} ({{ plant["Nom français"] }})</h2>
-
-    {% for key, value in plant.items() %}
-      {% if key == "Code" and value %}
-      <div class="field"><strong>{{ key }} :</strong> {{ value }}</div>
+  <!-- 🧾 SECTION 1 — Code + noms + classification / Image 1 -->
+  <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
+    <div style="flex: 2; min-width: 400px;">
+      {% if plant["Code"] %}
+      <div class="field"><strong>Code :</strong> {{ plant["Code"] }}</div>
       {% endif %}
-    {% endfor %}
+      {% for key in ["Nom arabe", "Noms vernaculaires", "Origine géographique"] %}
+        {% if plant[key] %}
+        <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
+        {% endif %}
+      {% endfor %}
 
-    {% for key, value in plant.items() %}
-      {% if key in ["Nom arabe", "Noms vernaculaires", "Origine géographique"] and value %}
-      <div class="field"><strong>{{ key }} :</strong> {{ value }}</div>
+      <div class="section-title">🧬 Classification</div>
+      {% for key in ["Division", "Classe", "Ordre", "Famille", "Genre", "Type de plante"] %}
+        {% if plant[key] %}
+        <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div style="flex: 1.2; min-width: 280px;">
+      {% if plant.image and plant.image[0] %}
+      <img src="{{ url_for('static', filename=plant.image[0]) }}" alt="Image 1" style="width: 100%; border-radius: 6px;">
+      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès.</div>
       {% endif %}
-    {% endfor %}
+    </div>
+  </div>
 
-    <div class="section-title">🧬 Classification</div>
-    {% for key, value in plant.items() %}
-      {% if key in ["Division", "Classe", "Ordre", "Famille", "Genre", "Type de plante"] and value %}
-      <div class="field"><strong>{{ key }} :</strong> {{ value }}</div>
+  <!-- 🖼️ SECTION 2 — Image 2 / Phénologie -->
+  <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px;">
+    <div style="flex: 1.2; min-width: 280px;">
+      {% if plant.image and plant.image[1] %}
+      <img src="{{ url_for('static', filename=plant.image[1]) }}" alt="Image 2" style="width: 100%; border-radius: 6px;">
+      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès.</div>
       {% endif %}
-    {% endfor %}
+    </div>
 
-    <div class="section-title">🔬 Description botanique</div>
-    {% for key, value in plant.items() %}
-      {% if key in ["Type de feuillage", "Hauteur moyenne ou maximale", "Type de feuilles", "Forme des feuilles", "Bord des feuilles", "Disposition des feuilles", "Couleur des fleurs", "Structure florale", "Type de fruit", "Type de racine"] and value %}
-      <div class="field"><strong>{{ key }} :</strong> {{ value }}</div>
+    <div style="flex: 2; min-width: 400px;">
+      <div class="section-title">🌦️ Informations phénologiques</div>
+      {% for key in ["Mois de débourrement", "Période de croissance végétative", "Période de floraison", "Période de fructification", "Période de maturité des fruits", "Période de chute des feuilles"] %}
+        {% if plant[key] %}
+        <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- 🔬 SECTION 3 — Botanique / Image 3 -->
+  <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px;">
+    <div style="flex: 2; min-width: 400px;">
+      <div class="section-title">🔬 Description botanique</div>
+      {% for key in ["Type de feuillage", "Hauteur moyenne ou maximale", "Type de feuilles", "Forme des feuilles", "Bord des feuilles", "Disposition des feuilles", "Couleur des fleurs", "Structure florale", "Type de fruit", "Type de racine"] %}
+        {% if plant[key] %}
+        <div class="field"><strong>{{ key }} :</strong> {{ plant[key] }}</div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div style="flex: 1.2; min-width: 280px;">
+      {% if plant.image and plant.image[2] %}
+      <img src="{{ url_for('static', filename=plant.image[2]) }}" alt="Image 3" style="width: 100%; border-radius: 6px;">
+      <div style="font-size: 0.85em; color: #666;">Photo prise à l'ENS de Fès.</div>
       {% endif %}
-    {% endfor %}
+    </div>
+  </div>
 
-    <div class="section-title">🌦️ Informations phénologiques</div>
-    {% for key, value in plant.items() %}
-      {% if key in ["Mois de débourrement", "Période de croissance végétative", "Période de floraison", "Période de fructification", "Période de maturité des fruits", "Période de chute des feuilles"] and value %}
-      <div class="field"><strong>{{ key }} :</strong> {{ value }}</div>
-      {% endif %}
-    {% endfor %}
-
-    {% if plant["intérêts"] %}
-    <div class="section-title">🌿 Intérêts</div>
-    <div class="field">
+  <!-- 🌿 SECTION 4 — Intérêts / Carte -->
+  <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px;">
+    <div style="flex: 2; min-width: 400px;">
+      {% if plant["intérêts"] %}
+      <div class="section-title">🌿 Intérêts</div>
       <ul>
         {% for item in plant["intérêts"] %}
-          <li>{{ item }}</li>
+        <li>{{ item }}</li>
         {% endfor %}
       </ul>
+      {% endif %}
     </div>
-    {% endif %}
+
+    <div style="flex: 1.2; min-width: 280px;">
+      {% if plant.map %}
+      <div class="section-title">🗺️ Carte de répartition</div>
+      <img src="{{ url_for('static', filename=plant.map) }}" alt="Carte de répartition" style="width: 100%; border-radius: 6px;">
+      {% if plant["Url carte de répartition"] %}
+      <div style="font-size: 0.85em; color: #666; margin-top: 5px;">
+        Source : <a href="{{ plant["Url carte de répartition"] }}" target="_blank">{{ plant["Url carte de répartition"] }}</a>
+      </div>
+      {% endif %}
+      {% endif %}
+    </div>
   </div>
 
-  <!-- 🖼️ COLONNE DROITE — Images et Carte -->
-  <div style="flex: 1.2; min-width: 300px;">
-
-    {% if plant.image %}
-    <div class="section-title">🖼️ Images</div>
-    {% for img in plant.image %}
-      <figure style="margin-bottom: 20px;">
-        <img src="{{ url_for('static', filename=img) }}" alt="Photo de l'espèce" style="width: 100%; max-width: 350px; border-radius: 6px;">
-        <figcaption style="font-size: 0.85em; color: #666; margin-top: 5px;">
-          Photo prise à l'ENS de Fès.
-        </figcaption>
-      </figure>
-    {% endfor %}
-    {% endif %}
-
-    {% if plant.map %}
-    <div class="section-title">🗺️ Carte de répartition</div>
-    <img src="{{ url_for('static', filename=plant.map) }}" alt="Carte de répartition" style="width: 100%; max-width: 350px; border-radius: 6px;">
-    {% if plant["Url carte de répartition"] %}
-    <div style="font-size: 0.85em; color: #666; margin-top: 5px;">
-      Source : <a href="{{ plant['Url carte de répartition'] }}" target="_blank">{{ plant['Url carte de répartition'] }}</a>
-    </div>
-    {% endif %}
-    {% endif %}
-
-  </div>
-</div>
+{% else %}
+  <p>Espèce non trouvée : {{ code }}</p>
+{% endif %}
