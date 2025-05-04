@@ -9,12 +9,18 @@ app = Flask(__name__, static_folder="static", template_folder="templates")
 
 plant_db = pd.read_csv("data/fiche_technique_v8.csv")
 
+def postprocess(code):
+    if "_andalous" in code:
+        return code.split("_andalous")[0]
+    return code
+
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
 
 @app.route("/fiche/<code>")
 def fiche(code):
+    code = postprocess(code)
     plant = plant_db[plant_db["Nom scientifique"] == code].iloc[0].to_dict()
     species_root_disk = Path(os.path.join('static', 'images', 'plantes', plant['Unnamed: 0']))
     species_root_relative_path = species_root_disk.relative_to("static")
