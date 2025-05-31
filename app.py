@@ -7,12 +7,27 @@ from pathlib import Path
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
-plant_db = pd.read_csv("data/fiche_technique_v8.csv")
+plant_db = pd.read_csv("data/fiche_technique_v10.csv")
 
 def postprocess(code):
     if "_andalous" in code:
-        return code.split("_andalous")[0]
-    return code
+        return code.split("_andalous")[0], "Andalous"
+    elif "_ens" in code:
+        return code.split("_ens")[0], "ENS"
+    elif "_amerique" in code:
+        return code.split("_ens")[0], "Amerique Latine"
+    else:
+        return None, None
+
+def get_institution(name):
+    if "ENS" in name:
+        return "ENS"
+    elif "Amerique Latine" in name:
+        return "Amerique Latine"
+    elif "Andalous" in name:
+        return "Andalous"
+    else:
+        return None
 
 @app.route("/", methods=["GET"])
 def index():
@@ -20,8 +35,10 @@ def index():
 
 @app.route("/fiche/<code>")
 def fiche(code):
-    code = postprocess(code)
-    plant = plant_db[plant_db["Nom scientifique"] == code].iloc[0].to_dict()
+    code, institution = postprocess(code)
+    espece_db = plant_db[plant_db["Nom scientifique"] == code].copy()
+    espece_db["Institution"] = espece_db.apply(lambda x: get_institution(x), axis = 1)
+    plant = espece_db[espece_db["Institution"] == institution].iloc[0].to_dict()
     species_root_disk = Path(os.path.join('static', 'images', 'plantes', plant['Unnamed: 0']))
     species_root_relative_path = species_root_disk.relative_to("static")
     species_image_files = [
