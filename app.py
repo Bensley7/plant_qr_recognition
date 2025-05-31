@@ -37,7 +37,7 @@ def index():
 def fiche(code):
     code, institution = postprocess(code)
     espece_db = plant_db[plant_db["Nom scientifique"] == code].copy()
-    espece_db["Institution"] = espece_db.apply(lambda x: get_institution(x), axis = 1)
+    espece_db["Institution"] = espece_db.apply(lambda x: get_institution(x["place"]), axis = 1)
     plant = espece_db[espece_db["Institution"] == institution].iloc[0].to_dict()
     species_root_disk = Path(os.path.join('static', 'images', 'plantes', plant['Unnamed: 0']))
     species_root_relative_path = species_root_disk.relative_to("static")
