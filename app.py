@@ -14,8 +14,8 @@ def postprocess(code):
         return code.split("_andalous")[0], "Andalous"
     elif "_ens" in code:
         return code.split("_ens")[0], "ENS"
-    elif "_amerique" in code:
-        return code.split("_ens")[0], "Amerique Latine"
+    elif "_amerique_latine" in code:
+        return code.split("_amerique_latine")[0], "Amerique Latine"
     else:
         return None, None
 
